@@ -1,10 +1,10 @@
 class Cell {
 public:
         Cell();
-        Cell(int e, int size, int sense);
-        sf::CircleShape getShape();
+        Cell(int e, float size, float sense);
+        Cell(int e);
         bool isNullCell();
-private:
+
         int energy;
         float r_size; 
 	float r_sense;
