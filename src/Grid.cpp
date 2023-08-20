@@ -1,11 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include "Grid.hpp"
-#include "Food.hpp"
-#include "Cell.hpp"
 
 constexpr float GRID_OFFSET = 50.f;
 constexpr float GRID_PIXEL_SIZE = 512.f;
-constexpr int GRID_CELLS_SIZE = 128;
 
 constexpr int CELLS_MAX_AMOUNT = 100;
 constexpr int FOOD_MAX_AMOUNT = 20;
@@ -69,7 +66,8 @@ void Grid::drawFood(sf::RenderWindow *window) {
 		for (int j=0; j<GRID_CELLS_SIZE; j++) {
 			if (!food[i][j].isNullCell()) {
 				Food f = food[i][j];
-				sf::CircleShape cs = f.getShape();
+				sf::CircleShape cs(2.f);
+				cs.setFillColor(sf::Color::Green);
 
 				cs.setPosition(GRID_OFFSET + GRID_PIXEL_SIZE/GRID_CELLS_SIZE*i,
 					       GRID_OFFSET + GRID_PIXEL_SIZE/GRID_CELLS_SIZE*j);
@@ -84,7 +82,9 @@ void Grid::drawCells(sf::RenderWindow *window) {
 		for (int j=0; j<GRID_CELLS_SIZE; j++) {
 			if (!cells[i][j].isNullCell()) {
 				Cell cell = cells[i][j];
-				sf::CircleShape cs = cell.getShape();
+				sf::CircleShape cs(cell.r_size);
+				cs.setFillColor(sf::Color::Red);
+
 
 				cs.setPosition(GRID_OFFSET + GRID_PIXEL_SIZE/GRID_CELLS_SIZE*i,
 					       GRID_OFFSET + GRID_PIXEL_SIZE/GRID_CELLS_SIZE*j);
