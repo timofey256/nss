@@ -65,7 +65,6 @@ void Grid::drawFood(sf::RenderWindow *window) {
 	for (int i=0; i<GRID_CELLS_SIZE; i++) {
 		for (int j=0; j<GRID_CELLS_SIZE; j++) {
 			if (!food[i][j].isNullCell()) {
-				Food f = food[i][j];
 				sf::CircleShape cs(2.f);
 				cs.setFillColor(sf::Color::Green);
 
