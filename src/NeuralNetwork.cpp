@@ -1,6 +1,6 @@
 #include <vector>
 #include <cmath>
-#include "Neuron.cpp"
+#include "Neuron.hpp"
 
 typedef unsigned int uint;
 typedef std::vector<Neuron> Layer;
