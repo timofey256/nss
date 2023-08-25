@@ -1,6 +1,5 @@
 #include <vector>
 
-typedef std::vector<Neuron> Layer;
 
 class Neuron {
 public:
@@ -15,3 +14,4 @@ private:
     std::vector<std::pair<Neuron, double>> connections;
 };
 
+typedef std::vector<Neuron> Layer;
