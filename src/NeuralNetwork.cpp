@@ -1,16 +1,10 @@
 #include <vector>
 #include <cmath>
 #include "Neuron.hpp"
+#include "Gene.cpp"
 
 typedef unsigned int uint;
 typedef std::vector<Neuron> Layer;
-
-struct Gene {
-	size_t connectionLayerIndex;
-	size_t sourceNeuronIndex;
-	size_t destNeuronIndex;
-	short weight;
-};
 
 class NeuralNetwork {
 public:
