@@ -14,7 +14,7 @@ all: $(EXECUTABLE)
 $(EXECUTABLE): $(OBJECTS)
 	$(CC) $^ -o $@ $(LDFLAGS)
 
-$(OUT_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OUT_DIR)
+$(OUT_DIR)/%.o: $(SRC_DIR)/%.cpp $(SRC_DIR)/%.hpp | $(OUT_DIR)
 	$(CC) $(CFLAGS) $< -o $@
 
 $(OUT_DIR):
