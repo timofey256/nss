@@ -1,3 +1,4 @@
+#include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Grid.hpp"
 
@@ -31,14 +32,14 @@ sf::RectangleShape Grid::getGridShape() {
 
 void Grid::populate() {
 	srand(time(0));
-
+	
 	int n = 0;
 	while (n < CELLS_MAX_AMOUNT) {
 		int pos_x = rand() % GRID_CELLS_SIZE;
 		int pos_y = rand() % GRID_CELLS_SIZE;
-
+		
 		if (cells[pos_x][pos_y].isNullCell()) {
-			Cell new_cell(100);
+			Cell new_cell(50);
 			cells[pos_x][pos_y] = new_cell;
 			n++;
 		}

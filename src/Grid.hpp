@@ -1,7 +1,7 @@
 #include "Cell.hpp"
 #include "Food.hpp"
 
-constexpr int GRID_CELLS_SIZE = 128;
+constexpr int GRID_CELLS_SIZE = 64; 
 
 class Grid {
 public:
