@@ -1,27 +1,12 @@
-#include <vector>
-#include <cmath>
-#include "Neuron.hpp"
-#include "Gene.cpp"
+#include "NeuralNetwork.hpp"
 
-typedef unsigned int uint;
-typedef std::vector<Neuron> Layer;
+NeuralNetwork::NeuralNetwork() {}
 
-class NeuralNetwork {
-public:
-	NeuralNetwork(const std::vector<uint> &topology, std::vector<Gene> &genome);
-	void feedForward(const std::vector<double> *inputValues);
-	void getResults(std::vector<double> *resultValues) const;
-private:
-	std::vector<Layer> layers;
-	void buildNetworkFromGenome(std::vector<Gene> &genome);
-};
-
-NeuralNetwork::NeuralNetwork(const std::vector<uint> &topology, std::vector<Gene> &genome) {
-	uint numLayers = topology.size();
-	for (size_t i = 0; i < numLayers; i++) {
+NeuralNetwork::NeuralNetwork(std::array<Gene, GENOME_LENGTH> &genome) {
+	for (size_t i = 0; i < LAYERS_NUM; i++) {
 		layers.push_back(Layer());
 	
-		for (size_t j = 0; j < topology[i]; j++) {
+		for (size_t j = 0; j < NEURONS_NUM; j++) {
 			layers.back().push_back(Neuron(j));
 		}
 	}
@@ -29,7 +14,7 @@ NeuralNetwork::NeuralNetwork(const std::vector<uint> &topology, std::vector<Gene
 	buildNetworkFromGenome(genome);
 }
 
-void NeuralNetwork::buildNetworkFromGenome(std::vector<Gene> &genome) {
+void NeuralNetwork::buildNetworkFromGenome(std::array<Gene, GENOME_LENGTH> &genome) {
 	for (Gene g : genome) {
 		layers[g.connectionLayerIndex + 1][g.destNeuronIndex].addConnection(g.sourceNeuronIndex, g.weight);
 	}	
