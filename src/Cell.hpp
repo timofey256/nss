@@ -1,5 +1,10 @@
+#ifndef CELL_H
+#define CELL_H
+
 #include <array>
-#include "Nature.hpp"
+#include <cstddef>
+
+#include "NeuralNetwork.hpp"
 
 class Cell {
 public:
@@ -13,6 +18,11 @@ public:
         int energy;
         float r_size; 
 	float r_sense;
+	NeuralNetwork brain;
 	std::array<Gene, GENOME_LENGTH> genome;
+
+private:
+        std::array<Gene, GENOME_LENGTH> generateRandomGenome();
 };
 
+#endif CELL_H
