@@ -1,19 +1,18 @@
-#include "Gene.cpp"
-#include <vector>
-
-constexpr int GENOM_LENGTH = 20;
+#include <array>
+#include "Nature.hpp"
 
 class Cell {
 public:
         Cell();
         Cell(int e);
         Cell(int e, float size, float sense);
-	Cell(int e, float size, float sense, std::vector<Gene> g);
+	Cell(int e, float size, float sense, std::array<Gene, GENOME_LENGTH>);
         bool isNullCell();
+	~Cell();
 
         int energy;
         float r_size; 
 	float r_sense;
-	std::vector<Gene> genome;
+	std::array<Gene, GENOME_LENGTH> genome;
 };
 
