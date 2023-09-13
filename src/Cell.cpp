@@ -23,6 +23,8 @@ Cell::Cell(int e, float size, float sense) {
 	r_size = size;
 	r_sense = sense;
 	genome = generateRandomGenome(); 
+	
+	brain = NeuralNetwork(genome);
 }
 
 Cell::Cell(int e, float size, float sense, std::array<Gene, GENOME_LENGTH> g) {
@@ -30,6 +32,7 @@ Cell::Cell(int e, float size, float sense, std::array<Gene, GENOME_LENGTH> g) {
 	r_size = size;
 	r_sense = sense;
 	genome = g;
+	brain = NeuralNetwork(genome);
 }
 
 Cell::~Cell() {}
