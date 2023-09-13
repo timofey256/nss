@@ -20,6 +20,23 @@ void Grid::draw(sf::RenderWindow *window) {
 	drawFood(window);
 }
 
+void Grid::moveCells() {
+	for (int x=0; x<GRID_CELLS_SIZE; x++) {
+		for (int y=0; y<GRID_CELLS_SIZE; y++) {
+			if (cells[x][y].energy != 0) {  // there's an organism in this cell
+				std::vector<double> input = {static_cast<double>(x), static_cast<double>(y), 5};
+				cells[x][y].brain.feedForward(&input);
+
+				std::vector<double> output;
+				cells[x][y].brain.getResults(&output);
+				
+				//std::cout << "Input : " << input[0] << " " << input[1] << " " << input[2] << std::endl; 
+				//std::cout << "Output : " << output[0] << " " << output[1] << " " << output[2] << std::endl; 
+			} 
+		}	
+	}
+}
+
 sf::RectangleShape Grid::getGridShape() {
 	sf::RectangleShape grid(sf::Vector2f(GRID_PIXEL_SIZE, GRID_PIXEL_SIZE));
 	grid.setPosition(GRID_OFFSET, GRID_OFFSET);

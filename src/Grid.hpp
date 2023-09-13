@@ -7,6 +7,8 @@ class Grid {
 public:
         Grid();
         void draw(sf::RenderWindow *window);
+        void moveCells();
+
 private:
         Cell cells[GRID_CELLS_SIZE][GRID_CELLS_SIZE];
         Food food[GRID_CELLS_SIZE][GRID_CELLS_SIZE];
@@ -17,4 +19,3 @@ private:
         void drawFood(sf::RenderWindow *window);
         void drawCells(sf::RenderWindow *window);
 };
-

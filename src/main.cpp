@@ -10,7 +10,7 @@ constexpr int WINDOW_HEIGHT = 700;
 int main() {
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), APPLICATION_TITLE);
 
-	Grid grid;	
+	Grid grid;
 	while (window.isOpen()) {
 		sf::Event ev;
 		while (window.pollEvent(ev)) {
@@ -19,7 +19,8 @@ int main() {
 			}
 
 			window.clear(sf::Color::Black);
-			grid.draw(&window);	
+			grid.draw(&window);
+			grid.moveCells();	
 			window.display();
 		}
 	}
