@@ -1,25 +1,28 @@
-#include <vector>
 #include <cmath>
+#include <iostream>
+#include <vector>
 #include "Neuron.hpp"
 
 Neuron::Neuron(size_t index) {
         myIndex = index;
 }
 
-void Neuron::addConnection(Neuron neuron, double weight) {
-        std::pair<Neuron, double> con = std::make_pair(neuron, weight);
-
+void Neuron::addConnection(int sourceIndex, double weight) {
+        std::pair<int, double> con = std::make_pair(sourceIndex, weight);
         connections.push_back(con);
 }
 
-void Neuron::feedForward() {
+void Neuron::feedForward(std::vector<std::vector<Neuron>> &layers, int prevLayerIndex) {
         double sum = 0.0;
-
-        for (size_t n = 0; n < connections.size(); n++) {
-                sum += connections[n].first.getOutput() * connections[n].second;
+        for (size_t i = 0; i < connections.size(); i++) {
+                int sourceNeuronIndex = connections[i].first;
+                int sourceNeuronOutput = layers[prevLayerIndex][sourceNeuronIndex].getOutput();
+                double weight = connections[i].second;
+                sum += sourceNeuronOutput * weight;
+                //std::cout << "adding to sum : " << sourceNeuronOutput << " * " << weight << " = " << sourceNeuronOutput*weight << std::endl;
         }
-
-        output = tanh(sum);
+        //std::cout << "total sum : " << sum << ". tanh(sum) : " << tanh(sum/10) << std::endl << std::endl;
+        output = tanh(sum/10);
 }
 
 double Neuron::getOutput() const {
