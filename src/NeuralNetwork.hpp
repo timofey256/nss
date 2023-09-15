@@ -12,10 +12,12 @@ typedef std::vector<Neuron> Layer;
 constexpr short GENOME_LENGTH = 8;
 constexpr short LAYERS_NUM = 3;
 constexpr short NEURONS_NUM = 3;
-constexpr short MAX_WEIGHT = 3;
+constexpr short MAX_WEIGHT = 10;
 
 class NeuralNetwork {
 public:
+	static constexpr std::array<int, LAYERS_NUM> topology = {3, 3, 3}; // including input and output layer
+	
 	NeuralNetwork();
 	NeuralNetwork(std::array<Gene, GENOME_LENGTH> &genome);
 	void feedForward(const std::vector<double> *inputValues);

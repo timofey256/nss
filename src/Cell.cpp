@@ -8,11 +8,13 @@ Cell::Cell(int e) : Cell(e, 3.f, 3.f) {}
 std::array<Gene, GENOME_LENGTH> Cell::generateRandomGenome() {
     std::array<Gene, GENOME_LENGTH> genome;
     for (int i=0; i<GENOME_LENGTH; i++) {
-        Gene new_gene = {rand() % (LAYERS_NUM-1),
-            rand() % NEURONS_NUM,
-            rand() % NEURONS_NUM,
-            rand() % MAX_WEIGHT };
-            genome[i] = new_gene;
+	int layer_i = rand() % (LAYERS_NUM-1) ;
+	int source_i = rand() % NeuralNetwork::topology[layer_i];
+	int dest_i = rand() % NeuralNetwork::topology[layer_i+1];
+	int weight_i = rand() % MAX_WEIGHT;	
+
+        Gene new_gene = {layer_i, source_i, dest_i, weight_i};
+	genome[i] = new_gene;
     }
 
     return genome;

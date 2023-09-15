@@ -7,16 +7,17 @@ NeuralNetwork::NeuralNetwork(std::array<Gene, GENOME_LENGTH> &genome) {
 	for (size_t i = 0; i < LAYERS_NUM; i++) {
 		layers.push_back(Layer());
 	
-		for (size_t j = 0; j < NEURONS_NUM; j++) {
+		for (size_t j = 0; j < topology[i]; j++) {
 			layers.back().push_back(Neuron(j));
 		}
 	}
+
 	buildNetworkFromGenome(genome);
 }
 
 void NeuralNetwork::buildNetworkFromGenome(std::array<Gene, GENOME_LENGTH> &genome) {
 	for (Gene g : genome) {
-		layers[g.connectionLayerIndex + 1][g.destNeuronIndex].addConnection(g.sourceNeuronIndex, g.weight);
+		layers[g.sourceLayerIndex + 1][g.destNeuronIndex].addConnection(g.sourceNeuronIndex, g.weight);
 	}	
 }
 
