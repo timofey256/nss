@@ -30,8 +30,28 @@ void Grid::moveCells() {
 				std::vector<double> output;
 				cells[x][y].brain.getResults(&output);
 				
+				double xDelta = (cells[x][y].NORMAL_SPEED-cells[x][y].r_size)*output[0];
+				double yDelta = (cells[x][y].NORMAL_SPEED-cells[x][y].r_size)*output[1];
+
+				if (output[2] <= 0.25) {
+					xDelta *= -1;
+					yDelta *= -1;
+				}
+				else if (output[2] <= 0.5) {
+					xDelta *= -1;
+				}
+				else if (output[2] <= 0.75) {
+					yDelta *= -1;
+				}
+				
+				int newX = (int)(x + xDelta);
+				int newY = (int)(y + yDelta);
+
+				cells[newX][newY] = cells[x][y];
+				cells[x][y] = Cell();
+				
 				//std::cout << "Input : " << input[0] << " " << input[1] << " " << input[2] << std::endl; 
-				//std::cout << "Output : " << output[0] << " " << output[1] << " " << output[2] << std::endl; 
+				std::cout << "Output neuron weights : " << output[0] << " " << output[1] << " " << output[2] << std::endl; 
 			} 
 		}	
 	}
