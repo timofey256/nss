@@ -24,7 +24,14 @@ void Grid::moveCells() {
 	for (int x=0; x<GRID_CELLS_SIZE; x++) {
 		for (int y=0; y<GRID_CELLS_SIZE; y++) {
 			if (cells[x][y].energy != 0) {  // there's an organism in this cell
-				std::vector<double> input = {static_cast<double>(x), static_cast<double>(y), 5};
+				std::vector<double> input = {
+											static_cast<double>(x), 
+											static_cast<double>(y), 
+											cells[x][y].energy,
+											0,
+											0,
+											cells[x][y].r_size};
+
 				cells[x][y].brain.feedForward(&input);
 
 				std::vector<double> output;
@@ -32,26 +39,20 @@ void Grid::moveCells() {
 				
 				double xDelta = (cells[x][y].NORMAL_SPEED-cells[x][y].r_size)*output[0];
 				double yDelta = (cells[x][y].NORMAL_SPEED-cells[x][y].r_size)*output[1];
-
-				if (output[2] <= 0.25) {
-					xDelta *= -1;
-					yDelta *= -1;
-				}
-				else if (output[2] <= 0.5) {
-					xDelta *= -1;
-				}
-				else if (output[2] <= 0.75) {
-					yDelta *= -1;
-				}
 				
+
 				int newX = (int)(x + xDelta);
 				int newY = (int)(y + yDelta);
 
-				cells[newX][newY] = cells[x][y];
-				cells[x][y] = Cell();
-				
+				if (newX != x || newY != y) {
+					if (newX < GRID_CELLS_SIZE && newX >= 0 && newY < GRID_CELLS_SIZE && newY >= 0) {
+						cells[newX][newY] = cells[x][y];
+					}
+					cells[x][y] = Cell();
+				}
 				//std::cout << "Input : " << input[0] << " " << input[1] << " " << input[2] << std::endl; 
-				std::cout << "Output neuron weights : " << output[0] << " " << output[1] << " " << output[2] << std::endl; 
+				// std::cout << "\t" << "xDelta: " << xDelta << ". yDelta: " << yDelta << std::endl; 
+				// std::cout << "Output neuron weights : " << output[0] << " " << output[1] << std::endl; 
 			} 
 		}	
 	}
