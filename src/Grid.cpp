@@ -27,10 +27,11 @@ void Grid::draw(sf::RenderWindow *window) {
 	drawFood(window);
 }
 
+// TODO: decompose code!
 void Grid::moveCells() {
 	for (int x=0; x<GRID_CELLS_SIZE; x++) {
 		for (int y=0; y<GRID_CELLS_SIZE; y++) {
-			if (cells[x][y] != nullptr) {  // there's an organism in this cell
+			if (cells[x][y] != nullptr) {
 				std::vector<double> input = {
 					static_cast<double>(x), 
 					static_cast<double>(y), 
@@ -51,16 +52,41 @@ void Grid::moveCells() {
 				int newX = (int)(x + xDelta);
 				int newY = (int)(y + yDelta);
 
-				if (newX != x || newY != y) {
-					if (newX < GRID_CELLS_SIZE && newX >= 0 && newY < GRID_CELLS_SIZE && newY >= 0) {
-						Cell* new_cell = new Cell(cells[x][y]->energy, cells[x][y]->r_size, cells[x][y]->r_sense, cells[x][y]->genome);
-						cells[newX][newY] = new_cell;
-						delete cells[x][y];
-
-						cells[x][y] = nullptr;
-					}
+				if (newX >= GRID_CELLS_SIZE) {
+					newX = GRID_CELLS_SIZE-1;
+				}
+				else if (newX < 0) {
+					newX = 0;
 				}
 
+				if (newY >= GRID_CELLS_SIZE) {
+					newY = GRID_CELLS_SIZE-1;
+				}
+				else if (newY < 0) {
+					newY = 0;
+				}
+
+				if (newX != x || newY != y) {
+					Cell* new_cell = new Cell(cells[x][y]->energy, cells[x][y]->r_size, cells[x][y]->r_sense, cells[x][y]->genome);
+					cells[newX][newY] = new_cell;
+	
+					delete cells[x][y];
+					cells[x][y] = nullptr;
+				}
+
+				cells[newX][newY]->energy -= cells[newX][newY]->r_size*5;
+
+				if (food[newX][newY] != nullptr) {
+					std::cout << "eaten" << std::endl;
+					cells[newX][newY]->energy += food[newX][newY]->energy;
+					delete food[newX][newY];
+					food[newX][newY] = nullptr;
+				}
+
+				if (cells[newX][newY]->energy <= 0) {
+					delete cells[newX][newY];
+					cells[newX][newY] = nullptr;
+				}
 			} 
 		}	
 	}
@@ -85,7 +111,7 @@ void Grid::populate() {
 		int pos_y = rand() % GRID_CELLS_SIZE;
 		
 		if (cells[pos_x][pos_y] == nullptr) {
-			Cell* new_cell = new Cell(50);
+			Cell* new_cell = new Cell(100);
 			cells[pos_x][pos_y] = new_cell;
 			n++;
 		}
@@ -108,7 +134,7 @@ void Grid::growFood() {
 		int pos_x = rand() % GRID_CELLS_SIZE;
 		int pos_y = rand() % GRID_CELLS_SIZE;
 		if (food[pos_x][pos_y] == nullptr && cells[pos_x][pos_y] == nullptr) {
-			Food* new_food = new Food(5);
+			Food* new_food = new Food(25);
 			food[pos_x][pos_y] = new_food;
 			n++;
 		}
