@@ -33,12 +33,10 @@ void NeuralNetwork::getResults(std::vector<double> *resultValues) const {
 
 void NeuralNetwork::feedForward(const std::vector<double> *inputValues) {
 	for (size_t i = 0; i < layers[0].size(); i++) {
-		//std::cout << "setting neuron's of 0'th layer output : " << inputValues->at(i)  << std::endl;
 		layers[0][i].setOutput(inputValues->at(i));
 	}
 
 	for (size_t i = 1; i < layers.size(); i++) {
-		//std::cout << "Between layers " << i-1 << " and " << i << std::endl;
 		for (size_t j = 0; j < layers[i].size(); j++) {
 			layers[i][j].feedForward(layers, i-1);
 		}
