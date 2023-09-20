@@ -23,22 +23,23 @@ void Grid::draw(sf::RenderWindow *window) {
 void Grid::moveCells() {
 	for (int x=0; x<GRID_CELLS_SIZE; x++) {
 		for (int y=0; y<GRID_CELLS_SIZE; y++) {
-			if (cells[x][y].energy != 0) {  // there's an organism in this cell
+			if (cells[x][y] != nullptr) {  // there's an organism in this cell
 				std::vector<double> input = {
 											static_cast<double>(x), 
 											static_cast<double>(y), 
-											cells[x][y].energy,
+											cells[x][y]->energy,
+											cells[x][y]->r_size,
 											0,
-											0,
-											cells[x][y].r_size};
+											0
+				};
 
-				cells[x][y].brain.feedForward(&input);
+				cells[x][y]->brain.feedForward(&input);
 
 				std::vector<double> output;
-				cells[x][y].brain.getResults(&output);
+				cells[x][y]->brain.getResults(&output);
 				
-				double xDelta = (cells[x][y].NORMAL_SPEED-cells[x][y].r_size)*output[0];
-				double yDelta = (cells[x][y].NORMAL_SPEED-cells[x][y].r_size)*output[1];
+				double xDelta = (cells[x][y]->NORMAL_SPEED-cells[x][y]->r_size)*output[0];
+				double yDelta = (cells[x][y]->NORMAL_SPEED-cells[x][y]->r_size)*output[1];
 				
 
 				int newX = (int)(x + xDelta);
@@ -46,13 +47,14 @@ void Grid::moveCells() {
 
 				if (newX != x || newY != y) {
 					if (newX < GRID_CELLS_SIZE && newX >= 0 && newY < GRID_CELLS_SIZE && newY >= 0) {
-						cells[newX][newY] = cells[x][y];
+						Cell* new_cell = new Cell(cells[x][y]->energy, cells[x][y]->r_size, cells[x][y]->r_sense, cells[x][y]->genome);
+						cells[newX][newY] = new_cell;
+						delete cells[x][y];
+
+						cells[x][y] = nullptr;
 					}
-					cells[x][y] = Cell();
 				}
-				//std::cout << "Input : " << input[0] << " " << input[1] << " " << input[2] << std::endl; 
-				// std::cout << "\t" << "xDelta: " << xDelta << ". yDelta: " << yDelta << std::endl; 
-				// std::cout << "Output neuron weights : " << output[0] << " " << output[1] << std::endl; 
+
 			} 
 		}	
 	}
@@ -76,8 +78,8 @@ void Grid::populate() {
 		int pos_x = rand() % GRID_CELLS_SIZE;
 		int pos_y = rand() % GRID_CELLS_SIZE;
 		
-		if (cells[pos_x][pos_y].isNullCell()) {
-			Cell new_cell(50);
+		if (cells[pos_x][pos_y] == nullptr) {
+			Cell* new_cell = new Cell(50);
 			cells[pos_x][pos_y] = new_cell;
 			n++;
 		}
@@ -91,8 +93,7 @@ void Grid::growFood() {
 	while (n < FOOD_MAX_AMOUNT) {
 		int pos_x = rand() % GRID_CELLS_SIZE;
 		int pos_y = rand() % GRID_CELLS_SIZE;
-
-		if (food[pos_x][pos_y].isNullCell() && cells[pos_x][pos_y].isNullCell()) {
+		if (food[pos_x][pos_y].isNullCell() && cells[pos_x][pos_y] == nullptr) {
 			Food new_food(100);
 			food[pos_x][pos_y] = new_food;
 			n++;
@@ -118,9 +119,9 @@ void Grid::drawFood(sf::RenderWindow *window) {
 void Grid::drawCells(sf::RenderWindow *window) {
 	for (int i=0; i<GRID_CELLS_SIZE; i++) {
 		for (int j=0; j<GRID_CELLS_SIZE; j++) {
-			if (!cells[i][j].isNullCell()) {
-				Cell cell = cells[i][j];
-				sf::CircleShape cs(cell.r_size);
+			if (cells[i][j] != nullptr) {
+				Cell* cell = cells[i][j];
+				sf::CircleShape cs(cell->r_size);
 				cs.setFillColor(sf::Color::Red);
 
 

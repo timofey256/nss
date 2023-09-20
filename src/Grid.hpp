@@ -10,7 +10,7 @@ public:
         void moveCells();
 
 private:
-        Cell cells[GRID_CELLS_SIZE][GRID_CELLS_SIZE];
+        Cell* cells[GRID_CELLS_SIZE][GRID_CELLS_SIZE];
         Food food[GRID_CELLS_SIZE][GRID_CELLS_SIZE];
         sf::RectangleShape grid;
         sf::RectangleShape getGridShape();
