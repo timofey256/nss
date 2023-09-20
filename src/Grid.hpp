@@ -11,7 +11,7 @@ public:
 
 private:
         Cell* cells[GRID_CELLS_SIZE][GRID_CELLS_SIZE];
-        Food food[GRID_CELLS_SIZE][GRID_CELLS_SIZE];
+        Food* food[GRID_CELLS_SIZE][GRID_CELLS_SIZE];
         sf::RectangleShape grid;
         sf::RectangleShape getGridShape();
         void populate();
