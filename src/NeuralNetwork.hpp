@@ -21,8 +21,8 @@ public:
 	1. Current position X
 	2. Current position Y
 	3. Current energy
-	4. Nearest enemy X (in a radius of sense). If not in sight, then 0
-	5. Nearest enemy Y (in a radius of sense). If not in sight, then 0
+	4. Nearest food X (in a radius of sense). If not in sight, then 0
+	5. Nearest food Y (in a radius of sense). If not in sight, then 0
 	6. Current size
 
 	Output neurons: 
