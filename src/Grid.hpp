@@ -2,6 +2,7 @@
 #include "Food.hpp"
 
 constexpr int GRID_CELLS_SIZE = 64; 
+constexpr int ENERGY_CONSUMPTION_MULTIPLIER = 5; 
 
 class Grid {
 public:
@@ -18,4 +19,8 @@ private:
         void growFood();
         void drawFood(sf::RenderWindow *window);
         void drawCells(sf::RenderWindow *window);
+
+	int validateCoordinate(int c);
+	void checkDeadCell(Cell* c);
+	void eatFood(int x, int y);
 };

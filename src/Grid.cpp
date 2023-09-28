@@ -6,7 +6,8 @@ constexpr float GRID_OFFSET = 50.f;
 constexpr float GRID_PIXEL_SIZE = 512.f;
 
 constexpr int CELLS_MAX_AMOUNT = 100;
-constexpr int FOOD_MAX_AMOUNT = 20;
+constexpr int FOOD_MAX_AMOUNT = 50;
+constexpr int FOOD_SUPPLY = 30;
 
 Grid::Grid() {
 	for (int i = 0; i < GRID_CELLS_SIZE; i++) {
@@ -40,7 +41,6 @@ void Grid::moveCells() {
 					0,
 					0
 				};
-
 				cells[x][y]->brain.feedForward(&input);
 
 				std::vector<double> output;
@@ -49,22 +49,8 @@ void Grid::moveCells() {
 				double xDelta = (cells[x][y]->NORMAL_SPEED-cells[x][y]->r_size)*output[0];
 				double yDelta = (cells[x][y]->NORMAL_SPEED-cells[x][y]->r_size)*output[1];
 
-				int newX = (int)(x + xDelta);
-				int newY = (int)(y + yDelta);
-
-				if (newX >= GRID_CELLS_SIZE) {
-					newX = GRID_CELLS_SIZE-1;
-				}
-				else if (newX < 0) {
-					newX = 0;
-				}
-
-				if (newY >= GRID_CELLS_SIZE) {
-					newY = GRID_CELLS_SIZE-1;
-				}
-				else if (newY < 0) {
-					newY = 0;
-				}
+				int newX = validateCoordinate((int)(x + xDelta));
+				int newY = validateCoordinate((int)(y + yDelta));
 
 				if (newX != x || newY != y) {
 					Cell* new_cell = new Cell(cells[x][y]->energy, cells[x][y]->r_size, cells[x][y]->r_sense, cells[x][y]->genome);
@@ -74,21 +60,36 @@ void Grid::moveCells() {
 					cells[x][y] = nullptr;
 				}
 
-				cells[newX][newY]->energy -= cells[newX][newY]->r_size*5;
-
-				if (food[newX][newY] != nullptr) {
-					std::cout << "eaten" << std::endl;
-					cells[newX][newY]->energy += food[newX][newY]->energy;
-					delete food[newX][newY];
-					food[newX][newY] = nullptr;
+				cells[newX][newY]->energy -= cells[newX][newY]->r_size*ENERGY_CONSUMPTION_MULTIPLIER;
+				if (cells[newX][newY] != nullptr) {
+					eatFood(newX, newY);		
 				}
-
+		
 				if (cells[newX][newY]->energy <= 0) {
 					delete cells[newX][newY];
 					cells[newX][newY] = nullptr;
 				}
 			} 
 		}	
+	}
+}
+
+int Grid::validateCoordinate(int coord) {
+	if (coord >= GRID_CELLS_SIZE) {
+		coord = GRID_CELLS_SIZE-1;
+	}
+	else if (coord < 0) {
+		coord = 0;
+	}
+
+	return coord;
+}
+
+void Grid::eatFood(int x, int y) {
+	if (food[x][y] != nullptr) {
+		cells[x][y]->energy += food[x][y]->energy;
+		delete food[x][y];
+		food[x][y] = nullptr;
 	}
 }
 
@@ -134,7 +135,7 @@ void Grid::growFood() {
 		int pos_x = rand() % GRID_CELLS_SIZE;
 		int pos_y = rand() % GRID_CELLS_SIZE;
 		if (food[pos_x][pos_y] == nullptr && cells[pos_x][pos_y] == nullptr) {
-			Food* new_food = new Food(25);
+			Food* new_food = new Food(FOOD_SUPPLY);
 			food[pos_x][pos_y] = new_food;
 			n++;
 		}
