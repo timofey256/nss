@@ -2,12 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Grid.hpp"
 
-constexpr float GRID_OFFSET = 50.f;
-constexpr float GRID_PIXEL_SIZE = 512.f;
 
-constexpr int CELLS_MAX_AMOUNT = 100;
-constexpr int FOOD_MAX_AMOUNT = 50;
-constexpr int FOOD_SUPPLY = 30;
 
 Grid::Grid() {
 	for (int i = 0; i < GRID_CELLS_SIZE; i++) {
@@ -68,10 +63,46 @@ void Grid::moveCells() {
 				if (cells[newX][newY]->energy <= 0) {
 					delete cells[newX][newY];
 					cells[newX][newY] = nullptr;
+					current_cell_amount--;
 				}
 			} 
 		}	
 	}
+}
+
+void Grid::repopulate() {
+
+	int children_per_parent = CELLS_MAX_AMOUNT / current_cell_amount;
+	for (int i=0; i<GRID_CELLS_SIZE; i++) {
+		for (int j=0; j<GRID_CELLS_SIZE; j++) {
+			if (cells[i][j] != nullptr) {
+				Cell* mutated = mutate_cell(cells[i][j]);
+				for (int i=0; i<children_per_parent; i++) {
+					set_cell_to_rand_pos(mutated);
+					current_cell_amount++;
+				}
+				cells[i][j] = nullptr;
+			}
+		}
+	}
+	growFood();
+}
+
+void Grid::set_cell_to_rand_pos(Cell* cell) {
+	srand(time(0));
+	bool is_set = false;
+	while (!is_set) {
+		int pos_x = rand() % GRID_CELLS_SIZE;
+		int pos_y = rand() % GRID_CELLS_SIZE;
+		if (cells[pos_x][pos_y] == nullptr) {
+			cells[pos_x][pos_y] = cell;
+			is_set = true;
+		}
+	}
+}
+
+Cell* Grid::mutate_cell(Cell* cell) {
+	return cell;
 }
 
 int Grid::validateCoordinate(int coord) {
@@ -125,7 +156,7 @@ void Grid::growFood() {
 	for (int i=0; i<GRID_CELLS_SIZE; i++) {
 		for (int j=0; j<GRID_CELLS_SIZE; j++) {
 			if (food[i][j] != nullptr) {
-				std::cout << "(2) non null before init: " << food[i][j] << std::endl;
+				food[i][j] = nullptr;
 			}
 		}
 	}
