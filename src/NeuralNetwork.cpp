@@ -8,6 +8,7 @@ NeuralNetwork::NeuralNetwork(std::array<Gene, GENOME_LENGTH> &genome) {
 		layers.push_back(Layer());
 	
 		for (size_t j = 0; j < topology[i]; j++) {
+			if (layers.size() == 1 && layers[0].size() == 6) {std::cout << "HEY!!!" << std::endl;}
 			layers.back().push_back(Neuron(j));
 		}
 	}
@@ -32,12 +33,12 @@ void NeuralNetwork::getResults(std::vector<double> *resultValues) const {
 }
 
 void NeuralNetwork::feedForward(const std::vector<double> *inputValues) {
-	for (size_t i = 0; i < layers[0].size(); i++) {
+	for (size_t i = 0; i < topology[0]; i++) {
 		layers[0][i].setOutput(inputValues->at(i));
 	}
 
 	for (size_t i = 1; i < layers.size(); i++) {
-		for (size_t j = 0; j < layers[i].size(); j++) {
+		for (size_t j = 0; j < topology[i]; j++) {
 			layers[i][j].feedForward(layers, i-1);
 		}
 	}

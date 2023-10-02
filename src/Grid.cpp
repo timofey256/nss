@@ -71,20 +71,22 @@ void Grid::moveCells() {
 }
 
 void Grid::repopulate() {
-
-	int children_per_parent = CELLS_MAX_AMOUNT / current_cell_amount;
+	int new_amount = 0;
 	for (int i=0; i<GRID_CELLS_SIZE; i++) {
 		for (int j=0; j<GRID_CELLS_SIZE; j++) {
-			if (cells[i][j] != nullptr) {
+			if (cells[i][j] != nullptr ) {
 				Cell* mutated = mutate_cell(cells[i][j]);
-				for (int i=0; i<children_per_parent; i++) {
+				for (int i=0; i<3; i++) {
 					set_cell_to_rand_pos(mutated);
-					current_cell_amount++;
+					new_amount++;
 				}
+				delete cells[i][j];
 				cells[i][j] = nullptr;
 			}
 		}
 	}
+
+	this->current_cell_amount = new_amount;
 	growFood();
 }
 
@@ -102,7 +104,9 @@ void Grid::set_cell_to_rand_pos(Cell* cell) {
 }
 
 Cell* Grid::mutate_cell(Cell* cell) {
-	return cell;
+    Cell* mutated_cell = new Cell(*cell);
+    mutated_cell->energy = 100;
+    return mutated_cell;
 }
 
 int Grid::validateCoordinate(int coord) {
