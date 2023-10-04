@@ -51,7 +51,6 @@ void Grid::moveCells() {
 					Cell* new_cell = new Cell(cells[x][y]->energy, cells[x][y]->r_size, cells[x][y]->r_sense, cells[x][y]->genome);
 					cells[newX][newY] = new_cell;
 	
-					delete cells[x][y];
 					cells[x][y] = nullptr;
 				}
 
@@ -61,7 +60,6 @@ void Grid::moveCells() {
 				}
 		
 				if (cells[newX][newY]->energy <= 0) {
-					delete cells[newX][newY];
 					cells[newX][newY] = nullptr;
 					current_cell_amount--;
 				}
@@ -80,7 +78,6 @@ void Grid::repopulate() {
 					set_cell_to_rand_pos(mutated);
 					new_amount++;
 				}
-				delete cells[i][j];
 				cells[i][j] = nullptr;
 			}
 		}
@@ -104,8 +101,11 @@ void Grid::set_cell_to_rand_pos(Cell* cell) {
 }
 
 Cell* Grid::mutate_cell(Cell* cell) {
-    Cell* mutated_cell = new Cell(*cell);
+    Cell* mutated_cell = new Cell();
     mutated_cell->energy = 100;
+    mutated_cell->r_size = cell->r_size;
+    mutated_cell->r_sense = cell->r_sense;
+    mutated_cell->genome = cell->genome; // TO BE MUTATED!
     return mutated_cell;
 }
 
