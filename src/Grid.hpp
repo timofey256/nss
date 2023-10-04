@@ -18,10 +18,9 @@ public:
         void draw(sf::RenderWindow *window);
         void moveCells();
         void repopulate();
-        Cell* cells[GRID_CELLS_SIZE][GRID_CELLS_SIZE];
 
 private:
-
+        Cell* cells[GRID_CELLS_SIZE][GRID_CELLS_SIZE];
         Food* food[GRID_CELLS_SIZE][GRID_CELLS_SIZE];
         sf::RectangleShape grid;
         sf::RectangleShape getGridShape();

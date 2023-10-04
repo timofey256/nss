@@ -19,9 +19,7 @@ void Neuron::feedForward(std::vector<std::vector<Neuron>> &layers, int prevLayer
                 int sourceNeuronOutput = layers[prevLayerIndex][sourceNeuronIndex].getOutput();
                 double weight = connections[i].second;
                 sum += sourceNeuronOutput * weight;
-                //std::cout << "adding to sum : " << sourceNeuronOutput << " * " << weight << " = " << sourceNeuronOutput*weight << std::endl;
         }
-        //std::cout << "total sum : " << sum << ". tanh(sum) : " << tanh(sum/10) << std::endl << std::endl;
         output = tanh(sum/10);
 }
 
