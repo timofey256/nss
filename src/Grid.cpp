@@ -2,8 +2,6 @@
 #include <SFML/Graphics.hpp>
 #include "Grid.hpp"
 
-
-
 Grid::Grid() {
 	for (int i = 0; i < GRID_CELLS_SIZE; i++) {
         for (int j = 0; j < GRID_CELLS_SIZE; j++) {
@@ -50,7 +48,6 @@ void Grid::moveCells() {
 				if (newX != x || newY != y) {
 					Cell* new_cell = new Cell(cells[x][y]->energy, cells[x][y]->r_size, cells[x][y]->r_sense, cells[x][y]->genome);
 					cells[newX][newY] = new_cell;
-	
 					cells[x][y] = nullptr;
 				}
 
@@ -61,7 +58,7 @@ void Grid::moveCells() {
 		
 				if (cells[newX][newY]->energy <= 0) {
 					cells[newX][newY] = nullptr;
-					current_cell_amount--;
+					this->current_cell_amount--;
 				}
 			} 
 		}	
@@ -69,6 +66,7 @@ void Grid::moveCells() {
 }
 
 void Grid::repopulate() {
+	int children_per_parent = CELLS_MAX_AMOUNT / this->current_cell_amount;
 	int new_amount = 0;
 	for (int i=0; i<GRID_CELLS_SIZE; i++) {
 		for (int j=0; j<GRID_CELLS_SIZE; j++) {
@@ -83,7 +81,7 @@ void Grid::repopulate() {
 		}
 	}
 
-	this->current_cell_amount = new_amount;
+	current_cell_amount = new_amount;
 	growFood();
 }
 
